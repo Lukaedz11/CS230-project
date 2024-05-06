@@ -12,7 +12,6 @@ import matplotlib.pyplot as plt
 #Loads Data from CSV file
 def data():
     df = pd.read_csv('nuclear_explosions.csv')
-    df['latitude'] = pd.to_numeric(df['latitude'])
     return df
 
 #Consolidates date month, day and Year for display in the map.
@@ -52,7 +51,7 @@ def piechart(df):#[VIZ2]
 #LineChart that compares bomb explosions for USA and USSR. Would be useful for cold war statistics
 def linechart_usa_ussr(df):
     filtered_df = df[df['Weapon_source_country'].isin(['USA', 'USSR'])]
-    grouped_df = filtered_df.groupby(['Date.Year', 'Weapon_source_country']).size().unstack().fillna(0)
+    grouped_df = filtered_df.groupby(['Date.Year', 'Weapon_source_country']).size().unstack().fillna(0)#
     grouped_df.plot(kind='line', color = ['blue', 'red'])
     plt.title('Number of Explosions by USA and USSR')
     plt.xlabel('Year')
@@ -62,7 +61,7 @@ def linechart_usa_ussr(df):
 
 #Pivottable that displays each year how may bombs were tested
 def pivot_table(df): #[DA6][DA7][VIZ3]
-    pivot_table = df.pivot_table(index='Date.Year', aggfunc='size').reset_index(name='Number of Explosions')
+    pivot_table = df.pivot_table(index='Date.Year', aggfunc='size').reset_index(name='Number of Explosions')#
     st.write(pivot_table)
     plt.figure(figsize=(10, 6))
     plt.bar(pivot_table['Date.Year'], pivot_table['Number of Explosions'])
@@ -104,7 +103,7 @@ def main():
     st.title("Nuclear Explosions")
     tab1, tab2, tab3, tab4 = st.tabs(["Map", "Pie Chart", "Pivot Table", "Linechart"])
     country = df['Weapon_source_country'].value_counts()
-    country_df = pd.DataFrame(country).reset_index()
+    country_df = pd.DataFrame(country).reset_index()#
     country_df.columns = ['Weapon_source_country', 'count']
     selected_country = st.sidebar.selectbox('Select a country', country.index)  # [DA4][ST1][ST4]
     slider_value = st.sidebar.slider("Select Value", 1945, 1998, 1972)
@@ -130,3 +129,4 @@ def main():
 main()
 st.set_option('deprecation.showPyplotGlobalUse', False) #streamlit gave me this code to shut warning so it is not connected to my project, just for technical purposes
 #The support for global pyplot instances is planned to be removed soon. this is warning
+# df['latitude'] = pd.to_numeric(df['latitude'])
